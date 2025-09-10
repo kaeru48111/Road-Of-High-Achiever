@@ -1,0 +1,402 @@
+\documentclass{jsarticle}
+
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{braket}
+\usepackage{listings}
+\usepackage{jvlisting}
+\usepackage{ascmac}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+\newtheorem{thm}{定理}
+\newtheorem{dfn}{定義}
+\newtheorem{axi}{公理}
+\newtheorem{lem}{補題}
+\newtheorem{cor}{系}
+\newtheorem{prp}{命題}
+\newtheorem{exm}{例}
+\newtheorem{rem}{注意}
+
+
+
+\title{Quantum Field Theory in Curved Spacetime}
+\author{三角 矢雲}
+\date{\today}
+
+\begin{document}
+
+
+
+\maketitle
+
+\section{数学的準備}
+
+この章では多様体と微分幾何学の復習をする.復習なので詳細な証明は省略する.
+
+\subsection{反変ベクトルと共変ベクトル}
+
+まずは,微分についての定義する.
+
+\begin{itembox}[l]{導関数}
+
+ある滑らかな写像$\varphi:\mathbb{R}^n \to \mathbb{R}^m$を考える.このとき線形写像$D\varphi\rvert_x:\mathbb{R}^n \to \mathbb{R}^m$を$v \in \mathbb{R}^n$に対して
+
+\begin{align}
+D\varphi\rvert_x (v) =\lim_{t \to 0} \frac{\varphi(x+tv) - \varphi(x)}{t}
+\end{align}
+
+と定義し,これを導関数と呼ぶ.さらにこれは結合則
+
+\begin{align}
+D(\varphi \circ \psi)\rvert_x = D\varphi\rvert_{\psi(x)}D\psi\rvert_x
+\end{align}
+
+を満たす.
+
+\end{itembox}\\
+
+次に多様体における座標系について定義する.
+
+\begin{itembox}[l]{座標近傍(チャート)と遷移関数}
+
+$M$を$n$次元多様体とし,$V$を$\mathbb{R}^n$の開部分集合とする.\\
+$M$の開部分集合$U$と同相写像$\kappa:U \to V$の組$(U,\kappa)$を$M$の座標近傍または,チャートと呼ぶ.\\
+また,2つのチャート$(U,\kappa)$と$(U^\prime,\kappa^\prime)$について$U \cap U^\prime \neq\emptyset$であるとき,遷移関数$\varphi:\kappa(U \cap U^\prime) \to \kappa^\prime(U \cap U^\prime)$を次のように定義する.
+
+\begin{align}
+\varphi = \kappa^\prime \circ \kappa^{-1}
+\end{align}
+
+このとき,写像$\varphi$は滑らかである.
+
+\end{itembox}
+
+$M$上の幾何学的対象はこのチャートを用いて表現することが可能である.チャートが重なっている部分では様々なチャート表現があり,それらは遷移関数を用いて変換される.以下に具体例を挙げる.\\
+
+\begin{exm}
+ 
+関数$f:M \to \mathbb{R}$のチャート表現$f_\kappa:\kappa(U) \to \mathbb{R}$は$f_\kappa = f \circ \kappa^{-1}$と与えられる.この変換則はスカラーであり,
+
+\begin{align}
+f_{\kappa^\prime}(\varphi(x)) =f_\kappa (x)
+\end{align}
+
+と変換される.
+
+\end{exm}
+
+\begin{exm} 
+
+$M$上のベクトル場$X$のチャート表現$X_\kappa:\kappa(U) \to \mathbb{R}^n$は反変的な変換則になり,
+
+\begin{align}
+X_{\kappa^\prime}(\varphi(x)) = D\varphi\rvert_x X_\kappa(x)
+\end{align}
+
+と変換される.
+
+\end{exm}
+
+\begin{exm} 
+
+$M$上の共変ベクトル場$\xi$のチャート表現$\xi_\kappa:\kappa(U)\to (\mathbb{R}^n)^*$は共変的な変換則となり,
+
+\begin{align}
+\xi_{\kappa^\prime}(\varphi(x))D\varphi\rvert_x = \xi_\kappa(x)
+\end{align}
+
+と変換される.
+
+\end{exm}
+
+\begin{exm}
+  
+重み$k$の密度$\rho$はチャート表現$\rho_\kappa:\kappa(U) \to \mathbb{R}$を持ち,
+
+\begin{align}
+\rho_{\kappa^\prime}(\varphi(x))|\det D\varphi\rvert_x|^k= \rho_\kappa(x)
+\end{align}
+
+という変換則を持つ.
+
+\end{exm}
+
+\begin{exm}
+  
+$c:\mathbb{R} \to M$を滑らかな曲線とする.このとき,$C(t)$での接ベクトル$\dot{c}(t)$は以下のように表される.
+
+\begin{align}
+\dot{c}(t)_\kappa=D(\kappa \circ c)\rvert_t=\frac{d}{dt}\kappa(c(t))
+\end{align}
+
+また,連鎖律より,チャート間では,接ベクトルは反変的に変換される.
+
+\begin{align}
+\dot{c}(t)_{\kappa^\prime} =D(\kappa^\prime \circ c)\rvert_t=D(\varphi \circ \kappa \circ c)=D\varphi\rvert_{\kappa(c(t))}D(\kappa\circ c)= D\varphi\rvert_{\kappa(c(t))}\dot{c}(t)_\kappa
+\end{align}
+
+同様に,$f:M\to\mathbb{R}$がなめらかな関数であるとき,共変ベクトル場$\nabla f$は以下のように表される
+
+\begin{align}
+(\nabla f)_\kappa =Df_\kappa
+\end{align}
+
+これに対しても連鎖率より,
+
+\begin{align}
+(\nabla f)_\kappa =D(f_{\kappa^\prime}\circ \varphi)=Df_{\kappa^\prime} D\varphi =(\nabla f)_{\kappa^\prime}D\varphi
+\end{align}
+
+共変的に変換されることがわかる.
+
+\end{exm}
+
+\begin{exm}
+  
+重み1の密度は単に「密度」と呼ばれており,$U \cap U^\prime$を台に持つ密度に対して
+
+\begin{align}
+\int_{\kappa(U)}\rho_\kappa(x)d^nx=\int_{\kappa^\prime(U)}\rho_\kappa^\prime(y)d^ny
+\end{align}
+
+が成り立つことがわかる.ここから,$\rho$が$U$を台に持つならば,重み付けによって積分を
+
+\begin{align}
+\int_M \rho=\int_{\kappa(U)}\rho_\kappa (x)d^nx
+\end{align}
+
+と定義できる.このとき,密度は積分測度を含んでいる.
+
+\end{exm}
+
+\begin{exm} 
+  
+$X$をベクトル場,$\xi$を共変ベクトル場とする.この時,スカラー関数$\xi(X)$が存在し,
+
+\begin{align}
+\xi(X)_\kappa=\xi_\kappa \cdot X_\kappa
+\end{align}
+
+と表される.ただし,$\cdot$は行ベクトルと列ベクトルの積を表す.
+
+\end{exm}
+
+今までチャート表現について述べてきたが,今まで述べた例にはさらに整頓された定式化が存在する.例えば,点$p$におけるベクトルは線形写像$v:C^\infty(M;\mathbb{R})\to\mathbb{R}$によって表現されてライプニッツ則を満たす.
+
+\begin{align}
+v(fg)=v(f)g(p)+f(p)v(g)\quad f,g\in C^\infty(M;\mathbb{R})
+\end{align}
+
+さらに,以下のような$p$を通る曲線の同値類として表現することもできる.
+
+\begin{align}
+c\sim c^\prime \Leftrightarrow D(f\circ c)(0)=D(f \circ c^\prime)(0)
+\end{align}
+
+ただし,$c(0)=c^\prime(0)=p$である.
+
+
+\subsection{テンソルと縮約記法}
+
+多様体上の点$p$におけるベクトルの集合は$M$における$p$での接空間$T_pM$を作り,その双対空間である$T_p^*M$は例に見るように$p$における共変ベクトル空間と同一視することが出来る.
+
+\begin{itembox}[l]{テンソル}
+
+多重線形写像$S$を
+
+\begin{align}
+S:\underbrace{T_p^*M \times \cdots \times T_p^*M}_{k\text{個}}\times \underbrace{T_pM \times \cdots \times T_pM}_{l\text{個}}\to \mathbb{R}
+\end{align}
+
+とする.この時,$S$を$(k,l)$型テンソルと呼ぶ.さらに,これはテンソル積空間の元である.
+
+\begin{align}
+S \in \underbrace{T_pM \otimes \cdots \otimes T_pM}_{k\text{個}}\otimes\underbrace{T_p^*M \otimes \cdots \otimes T_p^*M}_{l\text{個}}
+\end{align}
+
+特にベクトルは$(1,0)$型テンソル,共変ベクトルは$(0,1)$型テンソルと呼ぶ.
+
+\end{itembox}
+
+テンソルの計算を簡潔に表現するために,縮約記法を用いる.
+
+\begin{exm}
+
+$S^a{}_b{}^c$は$(2,1)$型テンソルは多重線形写像
+
+\begin{align}
+S:T_p^*M \times T_pM \times T_p^*M \to \mathbb{R}
+\end{align}
+
+であり,
+
+\begin{align}
+S\in T_pM\otimes T_p^*M \otimes T_pM
+\end{align}
+
+である.ここで$\xi,\eta\in T_p^*M$とし,$v\in T_pM$とすると,$S^a{}_b{}^c\xi_av^b\eta^c$はスカラーである.これを$S(\xi,v,\eta)$と書くと,$S^a{}_b{}^c\xi_av^b$は線形写像となり,
+
+\begin{align}
+T_p^*M \ni \eta \mapsto S(\xi,v,\eta) \in \mathbb{R}
+\end{align}
+
+と書ける.
+
+\end{exm}
+
+ここで,添え字についてのルールを定義する.
+
+\begin{itembox}[l]{添え字のルール}
+
+\begin{itemize}
+\item 上添えと下添え字はそれぞれ反変要素と共変要素の成分を表している.\footnote{両者を区別するための記法であるので,どちらが上添えでどちらが下添えかは重要ではない.}
+\item 同じ文字の添え字については,上添え字と下添え字が1つずつ現れた場合のみ,それぞれの成分の積の和が取られる.これを縮約と呼ぶ.
+\item 上添え字と下添え字ではそれぞれ重複した文字を使用することはできない.
+\end{itemize}
+
+\end{itembox}
+
+また,慣習として添え字はギリシャ文字を用いることが多い.これはチャート表現の下添え字と混同する可能性があるため,ことなるチャート表現を用いている場合は本文では同じ種類の添え字に${}^\prime$を用いて区別する.
+
+\begin{exm}
+$S$を滑らかな$(0,2)$型テンソル場とする.そしてそのチャート表現を$S_{\alpha\beta}$とするとその変換則は
+
+\begin{align}
+S_{\alpha^\prime\beta^\prime}(D\varphi \rvert_x)^{\alpha^\prime}{}_\alpha (D\varphi \rvert_x)^{\beta^\prime}{}_\beta= S_{\alpha\beta}
+\end{align}
+
+となる.また,ここから滑らかとは限らない密度$\rho_\kappa$を以下のように定義する.
+
+\begin{align}\label{dens}
+\rho_\kappa=\sqrt{|\det S_{\alpha\beta}|}
+\end{align}
+
+さらに,すべての$p$における接ベクトル$u$に対して$S_{\alpha\beta}u^\alpha v^\beta=0$であるとき,$v=0$であるとき$S$を非退化であるという.
+$S$が非退化なとき,その行列式は0ではなく,$\rho_\kappa$は滑らかなになる.
+
+\end{exm}
+
+
+\subsection{計量と共変微分}
+
+擬Riemann多様体における計量の定義について述べる.
+
+\begin{itembox}[l]{計量}
+
+計量$g$とは多様体の各点に対して滑らかで非退化かつ対称な$(0,2)$型テンソル場である.
+
+\end{itembox}
+
+ここで,対称とは添え字を入れ替えても変化しないことを意味している.
+
+\begin{exm}
+
+$(0,2)$型テンソル$S_{\alpha\beta}$が対称であるとき,
+
+
+\begin{align}
+S_{\alpha\beta}=S_{\beta\alpha}
+\end{align}
+
+が成り立っている.
+
+\end{exm}
+
+また,この計量の定義より\eqref{dens}で定義した$\rho_g$は滑らかであり,これは体積要素と呼ばれ,$d\text{Vol}_g$と書かれる.
+さらに,計量$g$は成分表示として以下のように表される.
+
+\begin{align}
+ds^2=g_{\alpha\beta}dx^\alpha dx^\beta
+\end{align}
+
+計量から定義した体積要素を用いて,多様体上の積分を
+
+\begin{align}
+\int_M f(p) d\text{Vol}_g(p)= \int_M f \rho_g
+\end{align}
+
+と定義できる.\\
+点$p$での計量における符号はあるチャート表現における正の固有値の数と負の固有値の数の差によって決定される.そしてこの符号はチャート表現に依らない.
+$n$次元Lorentz多様体$(+,-,-,\cdots)$においては符号は$2-n$によって決定される.また,$g(u,u)>0$を満たすベクトル$u$を時間的(timelike),$g(u,u)<0$となるものを空間的(spacelike),$g(u,u)=0$を満たすものを零(null)と呼ぶ.
+接ベクトルが常に時間的(あるいは零,空間的)であるとき,その曲線を時間的(空間的)曲線と呼び,曲線が常に空間的ではないとき因果的(causal)であるという.\\
+
+計量は非退化性からあるの点においてベクトル空間と共変ベクトル空間の間に同型を誘導する.ベクトル$u,v$に対して共変ベクトル$u^\flat$を以下のように定義する.
+
+\begin{align}
+u^\flat(v)=g(u,v)
+\end{align}
+
+このとき,添え字を用いて記述すると
+
+\begin{align}
+(u^\flat)_\alpha=g_{\alpha\beta}u^\beta
+\end{align}
+
+と書けて,通常は$\flat$を省略して単に
+
+\begin{align}
+u_\alpha=g_{\alpha\beta}u^\beta
+\end{align}
+
+と書く.この逆写像は$\sharp$を用いて書かれて共変ベクトル$\xi$に対して,
+
+\begin{align}
+\xi^{\sharp\flat}=\xi
+\end{align}
+
+を満たすようなベクトル$\xi^\sharp$が定義される.添え字を用いて再び書くと,$\sharp$を省略して単に
+
+\begin{align}
+\xi^\alpha=g^{\alpha\beta}\xi_\beta
+\end{align}
+
+と書ける.ここから,対称$(2,0)$型テンソル$g^{\alpha\beta}$が決定されて
+
+\begin{align}
+g^{\alpha\beta}g_{\beta\gamma}=\delta^\alpha{}_\gamma
+\end{align}
+
+を満たす.そしてこれは,添え字の上げ下げとして知られている.\\
+
+計量は共変微分の定義にも用いられる.これは演算子$\nabla$によって関数を任意の型のテンソルに拡張するようなものである.
+この拡張方法は一意に定まり,以下の条件を満たす.
+
+\begin{itemize}
+\item $\nabla_\alpha g_{\beta\gamma}=0$を満たす/
+
+\item すべての関数$f$に対して
+
+\begin{align}
+\nabla_\alpha \nabla_\beta f=\nabla_\beta \nabla_\alpha f=0
+\end{align}
+
+を満たす.
+
+\item  Leibniz則を満たす.
+
+\end{itemize}
+
+さらに,チャート内においては
+
+\begin{align}
+\nabla_\beta u^\alpha=u^\alpha{}_{,\beta}+\Gamma^\alpha_{\beta\gamma}u^\gamma
+\end{align}
+
+と書ける.ただし,${}_{,\beta}$は$\beta$成分の座標における偏微分を表し,$\Gamma$はChristoffel記号であり,
+
+\begin{align}
+\Gamma^\alpha_{\beta\gamma}=\frac{1}{2}g^{\alpha\delta}(g_{\beta\delta,\gamma}+g_{\gamma\delta,\beta}-g_{\beta\gamma,\delta})
+\end{align}
+
+と書ける.
+
+\end{document}
